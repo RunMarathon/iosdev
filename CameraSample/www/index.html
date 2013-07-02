@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Camera</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+        <meta charset="utf-8">
+            <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+            <script type="text/javascript">
+                // Debugging div on device
+                var console_log;
+                
+                function onBodyLoad()
+                {
+                    document.addEventListener("deviceready", onDeviceReady, false);
+                }
+                
+                /*  Cordova has been initialized and is ready to roll */
+                function onDeviceReady()
+                {
+                    console_log = document.getElementById('console_div');
+                    console_log.innerHTML += "onDeviceReady()<br/>";
+                }
+                
+                /*  Open the device camera app */
+                function capturePhoto()
+                {
+                    console_log.innerHTML += "capturePhoto()<br/>";
+                    // navigator.camera.getPicture( cameraSuccess, cameraError, [ cameraOptions ] );
+                    navigator.camera.getPicture(getPhoto,
+                                                onFail,
+                                                {
+                                                quality: 50,
+                                                destinationType: Camera.DestinationType.FILE_URI, // // Return image file URI
+                                                sourceType:Camera.PictureSourceType.CAMERA,
+                                                targetWidth:360,  // Width in pixels to scale image. Aspect ratio is maintained. Required targetHeight.
+                                                targetHeight:540  // Height in pixels to scale image. Aspect ratio is maintained. Required targetWidth.
+                                                });
+                }
+                /* navigator.camera.getPicture success function */
+                function getPhoto(imageData)
+                {
+                    var cameraImage = document.getElementById('cameraImage');
+                    cameraImage.src = imageData;
+                    console_log.innerHTML += "getPhoto() - cameraImage.src: " + cameraImage.src + "<br/>";
+                }
+                /* navigator.camera.getPicture fail function */
+                function onFail(message)
+                {
+                    alert('Failed because: ' + message);
+                }
+                </script>
+            </head>
+    <body onload="onBodyLoad()" style = "text-align:center;background-color:#ccc;padding:0px;">
+        <div>
+            <h1 style = "margin-bottom:0px;">Patrics Camera</h1>
+            <button style = "font-size:20px;width:200px;height:44px;;margin-bottom:5px;" onclick="capturePhoto();">Take Picture</button>
+            <br>
+            <img style="width:360px;height:540px;;background-color:#fff;" id="cameraImage" src="" />
+            <div id="console_div" style = "text-align:left;border:1px solid black;background-color:#fff;height:150px;overflow:auto;"></div>
+        </div>
+    </body>
+</html>
